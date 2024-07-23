@@ -1,4 +1,4 @@
-# CANSLIM Tight Week Scanner
+# CANSLIM Scanner
 
 ## Table of Contents
 - [Introduction](#introduction)
@@ -11,15 +11,14 @@
 - [License](#license)
 
 ## Introduction
-The CANSLIM Tight Week Scanner is designed to help investors identify potential stock buy opportunities based on the CANSLIM method popularized by William O'Neil. 
-
+The CANSLIM Scanner is designed to help investors identify potential stock buy opportunities based on the CANSLIM method popularized by William O'Neil. 
 ## Features
 - **CANSLIM Criteria Analysis**: Evaluate stocks based on the CANSLIM method.
 - **Progress Indicator**: Visual progress bar to track the analysis process.
 - **Detailed Stock Information**: Fetches and displays EPS data, ETF holdings, and more.
 
 ## Installation
-To install and run the CANSLIM Tight Week Scanner, follow these steps:
+To install and run the CANSLIM Scanner, follow these steps:
 
 1. **Clone the Repository**:
     ```bash
@@ -34,13 +33,12 @@ To install and run the CANSLIM Tight Week Scanner, follow these steps:
     ```
 
 ## Usage
-To use the CANSLIM Tight Week Scanner:
+To use the CANSLIM Scanner:
 1. Provide a list of symbols in Symbols.txt (1 symbol per line)
 2. **Run the Script**:
     ```bash
     python canslim.py
     ```
-
 
 ## Getting Started
 The CANSLIM Scanner was created to address the need for a comprehensive and automated way to analyze stocks based on the CANSLIM method. It simplifies the process of identifying potential buy opportunities by integrating various stock analysis criteria and patterns into a single tool.
