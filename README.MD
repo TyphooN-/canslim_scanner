@@ -62,26 +62,6 @@ This tool is a Python script that leverages web scraping and financial data APIs
 Investors often struggle with manually analyzing stocks to identify potential buy opportunities. This tool automates the process, providing a faster and more efficient way to screen stocks based on well-established criteria and patterns.
 
 ## Functionality
-### Market Cap Filtering
-The script allows users to filter stocks based on their market capitalization:
-- Micro Cap
-- Small Cap
-- Mid Cap
-- Large Cap
-
-### Price Range Filtering
-Users can specify the price range for stocks they want to analyze:
-- Under $5
-- Under $10
-- $10 to $20
-- $20 to $50
-- Over $50
-
-### 3 Weeks Tight Pattern
-The tool identifies stocks that meet the 3 Weeks Tight (3WT) criteria, where the stock's weekly closing prices stay within a tight range for three consecutive weeks.
-
-### Cup and Handle Pattern
-The script detects the Cup and Handle pattern, a bullish continuation pattern that signals a potential upward move.
 
 ## CANSLIM Criteria
 The CANSLIM method screens stocks based on the following seven characteristics:
