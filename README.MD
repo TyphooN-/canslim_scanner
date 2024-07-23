@@ -69,6 +69,3 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ---
 
-Please contribute and fork. I was able to find a significant amount of stocks that have given a good 10% Return. 
----
-
