@@ -8,17 +8,12 @@
 - [Getting Started](#getting-started)
 - [Functionality](#functionality)
 - [CANSLIM Criteria](#canslim-criteria)
-- [3 Weeks Tight Pattern](#3-weeks-tight-pattern)
 - [License](#license)
 
 ## Introduction
-The CANSLIM Tight Week Scanner is designed to help investors identify potential stock buy opportunities based on the CANSLIM method popularized by William O'Neil. This tool combines traditional CANSLIM criteria with additional pattern recognition for the Cup and Handle and 3 Weeks Tight (3WT) patterns, providing a comprehensive analysis of stocks.
+The CANSLIM Tight Week Scanner is designed to help investors identify potential stock buy opportunities based on the CANSLIM method popularized by William O'Neil. 
 
 ## Features
-- **Market Cap Filtering**: Analyze stocks based on market capitalization categories (Micro Cap, Small Cap, Mid Cap, Large Cap).
-- **Price Range Filtering**: Focus on stocks within specific price ranges.
-- **3WT Pattern Recognition**: Identify stocks that meet the 3 Weeks Tight criteria.
-- **Cup and Handle Pattern Detection**: Analyze stocks for the Cup and Handle pattern.
 - **CANSLIM Criteria Analysis**: Evaluate stocks based on the CANSLIM method.
 - **Progress Indicator**: Visual progress bar to track the analysis process.
 - **Detailed Stock Information**: Fetches and displays EPS data, ETF holdings, and more.
@@ -40,23 +35,18 @@ To install and run the CANSLIM Tight Week Scanner, follow these steps:
 
 ## Usage
 To use the CANSLIM Tight Week Scanner:
-
-1. **Run the Script**:
+1. Provide a list of symbols in Symbols.txt (1 symbol per line)
+2. **Run the Script**:
     ```bash
     python canslim.py
     ```
 
-2. **Follow the Prompts**:
-    - Select a market cap category.
-    - Select a price range for stocks.
-    - Select the 3WT percentage range.
-    - The script will analyze the stocks and display the results.
 
 ## Getting Started
-The CANSLIM Tight Week Scanner was created to address the need for a comprehensive and automated way to analyze stocks based on the CANSLIM method. It simplifies the process of identifying potential buy opportunities by integrating various stock analysis criteria and patterns into a single tool.
+The CANSLIM Scanner was created to address the need for a comprehensive and automated way to analyze stocks based on the CANSLIM method. It simplifies the process of identifying potential buy opportunities by integrating various stock analysis criteria and patterns into a single tool.
 
 ### What It Is
-This tool is a Python script that leverages web scraping and financial data APIs to fetch and analyze stock data. It evaluates stocks against the CANSLIM criteria, detects Cup and Handle patterns, and checks for the 3 Weeks Tight pattern.
+This tool is a Python script that leverages web scraping and financial data APIs to fetch and analyze stock data. It evaluates stocks against the CANSLIM criteria.
 
 ### Why It Was Created
 Investors often struggle with manually analyzing stocks to identify potential buy opportunities. This tool automates the process, providing a faster and more efficient way to screen stocks based on well-established criteria and patterns.
