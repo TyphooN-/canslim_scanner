@@ -14,13 +14,26 @@ def fetch_eps_data(ticker):
         url = f"https://stockanalysis.com/stocks/{ticker}/financials/?p=quarterly"
         response = requests.get(url)
         soup = BeautifulSoup(response.text, 'html.parser')
-        eps_rows = soup.find_all('div', class_='row')[1:]
+        
+        # Locate the table containing the EPS data
+        table = soup.find('table')
+        if not table:
+            print(f"No financials table found for {ticker}")
+            print(response.text)  # Debug: print the entire HTML content for inspection
+            return {}
+
+        rows = table.find_all('tr')
         eps_data = {}
-        for row in eps_rows[:4]:
-            columns = row.find_all('div')
-            quarter = columns[0].text.strip()
-            eps = columns[2].text.strip()
-            eps_data[f'EPS {quarter}'] = eps
+        for row in rows:
+            columns = row.find_all('td')
+            if len(columns) < 3:
+                continue
+            period = columns[0].text.strip()
+            if 'EPS' in period:
+                for i in range(1, len(columns)):
+                    eps_data[f'EPS {i}'] = columns[i].text.strip()
+                break
+        
         return eps_data
     except Exception as e:
         print(f"Error fetching EPS data for {ticker}: {e}")
@@ -31,13 +44,26 @@ def fetch_annual_eps_data(ticker):
         url = f"https://stockanalysis.com/stocks/{ticker}/financials/?p=annual"
         response = requests.get(url)
         soup = BeautifulSoup(response.text, 'html.parser')
-        eps_rows = soup.find_all('div', class_='row')[1:]
+        
+        # Locate the table containing the EPS data
+        table = soup.find('table')
+        if not table:
+            print(f"No financials table found for {ticker}")
+            print(response.text)  # Debug: print the entire HTML content for inspection
+            return {}
+
+        rows = table.find_all('tr')
         eps_data = {}
-        for row in eps_rows[:3]:
-            columns = row.find_all('div')
-            year = columns[0].text.strip()
-            eps = columns[2].text.strip()
-            eps_data[f'EPS {year}'] = eps
+        for row in rows:
+            columns = row.find_all('td')
+            if len(columns) < 3:
+                continue
+            period = columns[0].text.strip()
+            if 'EPS' in period:
+                for i in range(1, len(columns)):
+                    eps_data[f'EPS {i}'] = columns[i].text.strip()
+                break
+        
         return eps_data
     except Exception as e:
         print(f"Error fetching annual EPS data for {ticker}: {e}")
@@ -93,7 +119,6 @@ def analyze_stock(ticker):
             'Market Cap': format_market_cap(stock_info.get('marketCap', 0)),
             'Quarterly EPS Growth (%)': f"{quarterly_growth:.2f}%" if quarterly_growth is not None else 'N/A',
             'Annual EPS Growth (%)': f"{annual_growth:.2f}%" if annual_growth is not None else 'N/A',
-            'Link': f"[View Ticker](https://stockanalysis.com/stocks/{ticker.lower()}/)",
             **eps_data
         }
     except Exception as e:
