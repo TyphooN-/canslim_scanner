@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import yfinance as yf
 import pandas as pd
+import numpy as np
 from tqdm import tqdm
 
 def read_text_file(file_path):
@@ -15,7 +16,6 @@ def fetch_eps_data(ticker):
         response = requests.get(url)
         soup = BeautifulSoup(response.text, 'html.parser')
         
-        # Locate the table containing the EPS data
         table = soup.find('table')
         if not table:
             print(f"No financials table found for {ticker}")
@@ -44,7 +44,6 @@ def fetch_annual_eps_data(ticker):
         response = requests.get(url)
         soup = BeautifulSoup(response.text, 'html.parser')
         
-        # Locate the table containing the EPS data
         table = soup.find('table')
         if not table:
             print(f"No financials table found for {ticker}")
@@ -111,12 +110,9 @@ def analyze_stock(ticker):
         annual_growth = calculate_annual_eps_growth(annual_eps_data)
         
         # Apply CANSLIM criteria
-        if quarterly_growth is not None and quarterly_growth < 25:
-            print(f"Quarterly EPS growth for {ticker} is below 25%.")
+        if quarterly_growth is None or quarterly_growth < 25:
             return None
-        
-        if annual_growth is not None and annual_growth < 25:
-            print(f"Annual EPS growth for {ticker} is below 25%.")
+        if annual_growth is None or annual_growth < 25:
             return None
         
         return {
@@ -161,6 +157,11 @@ def main():
             pbar.update(1)
 
     df = pd.DataFrame(analysis_results)
+
+    # Remove rows with NaN EPS data
+    eps_columns = [col for col in df.columns if col.startswith('EPS')]
+    df = df.dropna(subset=eps_columns)
+
     if not df.empty:
         print(df.to_string(index=False))
     else:
