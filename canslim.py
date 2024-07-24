@@ -127,7 +127,8 @@ def analyze_stock(ticker):
         return {
             'Ticker': ticker,
             'Company Name': stock_info.get('shortName', 'N/A'),
-            'Stock Price': format_price(stock_info.get('currentPrice', 0)),
+            'Stock Price': stock_info.get('currentPrice', 0),
+            'Formatted Stock Price': format_price(stock_info.get('currentPrice', 0)),
             'Market Cap': format_market_cap(stock_info.get('marketCap', 0)),
             'Quarterly EPS (%)': f"{quarterly_growth:.2f}%" if quarterly_growth is not None else 'N/A',
             'Annual EPS (%)': f"{annual_growth:.2f}%" if annual_growth is not None else 'N/A',
@@ -172,7 +173,8 @@ def main():
     df = df.dropna(subset=eps_columns)
 
     if not df.empty:
-        print(df.to_string(index=False))
+        df = df.sort_values(by='Stock Price')
+        print(df.drop(columns=['Stock Price']).to_string(index=False))
     else:
         print("No stocks met the criteria.")
 
