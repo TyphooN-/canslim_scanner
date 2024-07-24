@@ -19,7 +19,6 @@ def fetch_eps_data(ticker):
         table = soup.find('table')
         if not table:
             print(f"No financials table found for {ticker}")
-            print(response.text)  # Debug: print the entire HTML content for inspection
             return {}
 
         rows = table.find_all('tr')
@@ -49,7 +48,6 @@ def fetch_annual_eps_data(ticker):
         table = soup.find('table')
         if not table:
             print(f"No financials table found for {ticker}")
-            print(response.text)  # Debug: print the entire HTML content for inspection
             return {}
 
         rows = table.find_all('tr')
@@ -111,6 +109,15 @@ def analyze_stock(ticker):
         annual_eps_data = fetch_annual_eps_data(ticker)
         quarterly_growth = calculate_quarterly_eps_growth(eps_data)
         annual_growth = calculate_annual_eps_growth(annual_eps_data)
+        
+        # Apply CANSLIM criteria
+        if quarterly_growth is not None and quarterly_growth < 25:
+            print(f"Quarterly EPS growth for {ticker} is below 25%.")
+            return None
+        
+        if annual_growth is not None and annual_growth < 25:
+            print(f"Annual EPS growth for {ticker} is below 25%.")
+            return None
         
         return {
             'Ticker': ticker,
