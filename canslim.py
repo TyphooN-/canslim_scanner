@@ -4,67 +4,76 @@ import yfinance as yf
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
+import time
 
 def read_text_file(file_path):
     with open(file_path, 'r') as file:
         symbols = [line.strip() for line in file.readlines()]
     return symbols
 
-def fetch_eps_data(ticker):
-    try:
-        url = f"https://stockanalysis.com/stocks/{ticker}/financials/?p=quarterly"
-        response = requests.get(url)
-        soup = BeautifulSoup(response.text, 'html.parser')
-        
-        table = soup.find('table')
-        if not table:
-            print(f"No financials table found for {ticker}")
-            return {}
+def fetch_data_with_retry(url, retries=3, timeout=10):
+    for attempt in range(retries):
+        try:
+            response = requests.get(url, timeout=timeout)
+            response.raise_for_status()
+            return response
+        except (requests.RequestException, requests.Timeout) as e:
+            print(f"Attempt {attempt + 1} failed for URL {url}: {e}")
+            time.sleep(2)  # Wait before retrying
+    print(f"All attempts failed for URL {url}")
+    return None
 
-        rows = table.find_all('tr')
-        eps_data = {}
-        for row in rows:
-            columns = row.find_all('td')
-            if len(columns) < 3:
-                continue
-            period = columns[0].text.strip()
-            if 'EPS' in period:
-                for i in range(1, len(columns)):
-                    eps_data[f'EPS {i}'] = columns[i].text.strip()
-                break
-        
-        return eps_data
-    except Exception as e:
-        print(f"Error fetching EPS data for {ticker}: {e}")
+def fetch_eps_data(ticker):
+    url = f"https://stockanalysis.com/stocks/{ticker}/financials/?p=quarterly"
+    response = fetch_data_with_retry(url)
+    if response is None:
         return {}
+    soup = BeautifulSoup(response.text, 'html.parser')
+    
+    table = soup.find('table')
+    if not table:
+        print(f"No financials table found for {ticker}")
+        return {}
+
+    rows = table.find_all('tr')
+    eps_data = {}
+    for row in rows:
+        columns = row.find_all('td')
+        if len(columns) < 3:
+            continue
+        period = columns[0].text.strip()
+        if 'EPS' in period:
+            for i in range(1, len(columns)):
+                eps_data[f'EPS {i}'] = columns[i].text.strip()
+            break
+    
+    return eps_data
 
 def fetch_annual_eps_data(ticker):
-    try:
-        url = f"https://stockanalysis.com/stocks/{ticker}/financials/?p=annual"
-        response = requests.get(url)
-        soup = BeautifulSoup(response.text, 'html.parser')
-        
-        table = soup.find('table')
-        if not table:
-            print(f"No financials table found for {ticker}")
-            return {}
-
-        rows = table.find_all('tr')
-        eps_data = {}
-        for row in rows:
-            columns = row.find_all('td')
-            if len(columns) < 3:
-                continue
-            period = columns[0].text.strip()
-            if 'EPS' in period:
-                for i in range(1, len(columns)):
-                    eps_data[f'EPS {i}'] = columns[i].text.strip()
-                break
-        
-        return eps_data
-    except Exception as e:
-        print(f"Error fetching annual EPS data for {ticker}: {e}")
+    url = f"https://stockanalysis.com/stocks/{ticker}/financials/?p=annual"
+    response = fetch_data_with_retry(url)
+    if response is None:
         return {}
+    soup = BeautifulSoup(response.text, 'html.parser')
+    
+    table = soup.find('table')
+    if not table:
+        print(f"No financials table found for {ticker}")
+        return {}
+
+    rows = table.find_all('tr')
+    eps_data = {}
+    for row in rows:
+        columns = row.find_all('td')
+        if len(columns) < 3:
+            continue
+        period = columns[0].text.strip()
+        if 'EPS' in period:
+            for i in range(1, len(columns)):
+                eps_data[f'EPS {i}'] = columns[i].text.strip()
+            break
+    
+    return eps_data
 
 def calculate_quarterly_eps_growth(eps_data):
     try:
