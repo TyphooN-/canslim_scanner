@@ -120,8 +120,8 @@ def analyze_stock(ticker):
             'Company Name': stock_info.get('shortName', 'N/A'),
             'Stock Price': format_price(stock_info.get('currentPrice', 0)),
             'Market Cap': format_market_cap(stock_info.get('marketCap', 0)),
-            'Quarterly EPS Growth (%)': f"{quarterly_growth:.2f}%" if quarterly_growth is not None else 'N/A',
-            'Annual EPS Growth (%)': f"{annual_growth:.2f}%" if annual_growth is not None else 'N/A',
+            'Quarterly EPS (%)': f"{quarterly_growth:.2f}%" if quarterly_growth is not None else 'N/A',
+            'Annual EPS (%)': f"{annual_growth:.2f}%" if annual_growth is not None else 'N/A',
             **eps_data
         }
     except Exception as e:
