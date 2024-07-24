@@ -23,7 +23,7 @@ To install and run the CANSLIM Scanner, follow these steps:
 1. **Clone the Repository**:
     ```bash
     git clone https://github.com/TyphooN-/canslim_scanner.git
-    cd canslim_tightweek_scanner
+    cd canslim_scanner
     ```
 
 2. **Install Dependencies**:
