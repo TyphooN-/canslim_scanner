@@ -50,19 +50,17 @@ This tool is a Python script that leverages web scraping and financial data APIs
 Investors often struggle with manually analyzing stocks to identify potential buy opportunities. This tool automates the process, providing a faster and more efficient way to screen stocks based on well-established criteria and patterns.
 
 ## Functionality
+The script evaluates stocks against the CA categories of CANSLIM criteria. Stocks that meet at the EPS requirements of the criteria are highlighted.
 
 ## CANSLIM Criteria
 The CANSLIM method screens stocks based on the following seven characteristics:
 1. **C=Current Earnings**: Quarterly earnings per share are up 25% or more.
-2. **A=Annual Earnings**: Five-year average compounded earnings growth rate is greater than 24%.
+2. **A=Annual Earnings**: Five-year average compounded earnings growth rate is greater than 25%.
 3. **N=New Highs**: The stock is within 15% of making a new 52-week high and is breaking out of a period of consolidation.
 4. **S=Shares Outstanding**: The number of shares outstanding is less than 50 million shares, and there has been a recent increase in trading volume.
 5. **L=Leading Stocks**: The company is a market leader reflected by a Relative Strength Value (RSV) of 80 or higher.
 6. **I=Institutional Ownership**: Institutional sponsorship should be minimal, but there should be at least one major institution with a sizeable position in the stock.
 7. **M=Market Conditions**: The market posture should be bullish.
-
-### Example CANSLIM Scoring
-The script evaluates stocks against the CANSLIM criteria and assigns a score. Stocks that meet at least 60% of the criteria are highlighted.
 
 ## License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
