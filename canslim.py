@@ -47,9 +47,13 @@ def calculate_quarterly_eps_growth(eps_data):
     try:
         eps_values = list(eps_data.values())
         if len(eps_values) < 2:
+            print("Insufficient data for quarterly EPS growth calculation.")
             return None
         latest_eps = float(eps_values[0].replace('$', '').replace(',', ''))
         previous_eps = float(eps_values[1].replace('$', '').replace(',', ''))
+        if previous_eps == 0:
+            print("Previous EPS is zero, cannot calculate growth.")
+            return None
         growth = ((latest_eps - previous_eps) / previous_eps) * 100
         return growth
     except Exception as e:
@@ -60,9 +64,13 @@ def calculate_annual_eps_growth(annual_eps_data):
     try:
         eps_values = list(annual_eps_data.values())
         if len(eps_values) < 3:
+            print("Insufficient data for annual EPS growth calculation.")
             return None
         latest_eps = float(eps_values[0].replace('$', '').replace(',', ''))
         three_years_ago_eps = float(eps_values[2].replace('$', '').replace(',', ''))
+        if three_years_ago_eps == 0:
+            print("Three years ago EPS is zero, cannot calculate growth.")
+            return None
         growth = ((latest_eps - three_years_ago_eps) / three_years_ago_eps) * 100
         return growth
     except Exception as e:
@@ -83,8 +91,8 @@ def analyze_stock(ticker):
             'Company Name': stock_info.get('shortName', 'N/A'),
             'Stock Price': format_price(stock_info.get('currentPrice', 0)),
             'Market Cap': format_market_cap(stock_info.get('marketCap', 0)),
-            'Quarterly EPS Growth (%)': f"{quarterly_growth:.2f}%" if quarterly_growth else 'N/A',
-            'Annual EPS Growth (%)': f"{annual_growth:.2f}%" if annual_growth else 'N/A',
+            'Quarterly EPS Growth (%)': f"{quarterly_growth:.2f}%" if quarterly_growth is not None else 'N/A',
+            'Annual EPS Growth (%)': f"{annual_growth:.2f}%" if annual_growth is not None else 'N/A',
             'Link': f"[View Ticker](https://stockanalysis.com/stocks/{ticker.lower()}/)",
             **eps_data
         }
