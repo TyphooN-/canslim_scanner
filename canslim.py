@@ -26,31 +26,65 @@ def fetch_eps_data(ticker):
         print(f"Error fetching EPS data for {ticker}: {e}")
         return {}
 
-def fetch_etf_count(ticker):
+def fetch_annual_eps_data(ticker):
     try:
-        url = f"https://www.etf.com/{ticker}"
+        url = f"https://stockanalysis.com/stocks/{ticker}/financials/?p=annual"
         response = requests.get(url)
-        soup = BeautifulSoup(response.content, 'html.parser')
-        etf_div = soup.find('div', class_="stock-information__data--main")
-        etf_count = int(etf_div.text) if etf_div else 0
-        return etf_count
+        soup = BeautifulSoup(response.text, 'html.parser')
+        eps_rows = soup.find_all('div', class_='row')[1:]
+        eps_data = {}
+        for row in eps_rows[:3]:
+            columns = row.find_all('div')
+            year = columns[0].text.strip()
+            eps = columns[2].text.strip()
+            eps_data[f'EPS {year}'] = eps
+        return eps_data
     except Exception as e:
-        print(f"Error fetching ETF count for {ticker}: {e}")
-        return 0
+        print(f"Error fetching annual EPS data for {ticker}: {e}")
+        return {}
+
+def calculate_quarterly_eps_growth(eps_data):
+    try:
+        eps_values = list(eps_data.values())
+        if len(eps_values) < 2:
+            return None
+        latest_eps = float(eps_values[0].replace('$', '').replace(',', ''))
+        previous_eps = float(eps_values[1].replace('$', '').replace(',', ''))
+        growth = ((latest_eps - previous_eps) / previous_eps) * 100
+        return growth
+    except Exception as e:
+        print(f"Error calculating quarterly EPS growth: {e}")
+        return None
+
+def calculate_annual_eps_growth(annual_eps_data):
+    try:
+        eps_values = list(annual_eps_data.values())
+        if len(eps_values) < 3:
+            return None
+        latest_eps = float(eps_values[0].replace('$', '').replace(',', ''))
+        three_years_ago_eps = float(eps_values[2].replace('$', '').replace(',', ''))
+        growth = ((latest_eps - three_years_ago_eps) / three_years_ago_eps) * 100
+        return growth
+    except Exception as e:
+        print(f"Error calculating annual EPS growth: {e}")
+        return None
 
 def analyze_stock(ticker):
     try:
         stock = yf.Ticker(ticker)
         stock_info = stock.info
         eps_data = fetch_eps_data(ticker)
-        etf_count = fetch_etf_count(ticker)
+        annual_eps_data = fetch_annual_eps_data(ticker)
+        quarterly_growth = calculate_quarterly_eps_growth(eps_data)
+        annual_growth = calculate_annual_eps_growth(annual_eps_data)
         
         return {
             'Ticker': ticker,
             'Company Name': stock_info.get('shortName', 'N/A'),
             'Stock Price': format_price(stock_info.get('currentPrice', 0)),
             'Market Cap': format_market_cap(stock_info.get('marketCap', 0)),
-            '# ETFs Holding': etf_count,
+            'Quarterly EPS Growth (%)': f"{quarterly_growth:.2f}%" if quarterly_growth else 'N/A',
+            'Annual EPS Growth (%)': f"{annual_growth:.2f}%" if annual_growth else 'N/A',
             'Link': f"[View Ticker](https://stockanalysis.com/stocks/{ticker.lower()}/)",
             **eps_data
         }
