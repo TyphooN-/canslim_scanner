@@ -179,7 +179,7 @@ def main():
         print("No stocks met the criteria.")
 
     # Output results to CANSLIM.txt
-    with open("CANSLIM.txt", 'w') as output_file:
+    with open("CANSLIM20.txt", 'w') as output_file:
         if not df.empty:
             output_file.write(df.drop(columns=['Stock Price']).to_string(index=False))
         else:
