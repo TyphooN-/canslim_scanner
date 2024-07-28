@@ -119,9 +119,9 @@ def analyze_stock(ticker):
         annual_growth = calculate_annual_eps_growth(annual_eps_data)
         
         # Apply CANSLIM criteria
-        if quarterly_growth is None or quarterly_growth < 25:
+        if quarterly_growth is None or quarterly_growth <= 25:
             return None
-        if annual_growth is None or annual_growth < 25:
+        if annual_growth is None or annual_growth <= 25:
             return None
         
         return {
@@ -177,6 +177,15 @@ def main():
         print(df.drop(columns=['Stock Price']).to_string(index=False))
     else:
         print("No stocks met the criteria.")
+
+    # Output results to CANSLIM.txt
+    with open("CANSLIM.txt", 'w') as output_file:
+        if not df.empty:
+            output_file.write(df.drop(columns=['Stock Price']).to_string(index=False))
+        else:
+            output_file.write("No stocks met the criteria.\n")
+
+    print("Results written to CANSLIM.txt")
 
 if __name__ == "__main__":
     main()
