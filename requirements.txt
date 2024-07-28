@@ -1,5 +1,5 @@
 yfinance
 pandas
 requests
-tqdm
+numpy
 beautifulsoup4
