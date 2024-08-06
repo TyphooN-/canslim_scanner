@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 import time
 from fake_useragent import UserAgent
+from datetime import datetime
 
 # Initialize the user agent generator
 ua = UserAgent()
@@ -198,15 +199,19 @@ def main():
         print(result['Summary'])
         print(df.drop(columns=['Stock Price', 'Summary']).to_string(index=False))
 
-        # Output results to CANSLIM.txt
-        with open("CANSLIMprompt.txt", 'w') as output_file:
+        # Output results to CANSLIM_{ticker}_{timestamp}.txt
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        output_filename = f"CANSLIM_{ticker}_{timestamp}.txt"
+        with open(output_filename, 'w') as output_file:
             output_file.write(result['Summary'])
             output_file.write(df.drop(columns=['Stock Price', 'Summary']).to_string(index=False))
 
-        print("Results written to CANSLIMprompt.txt")
+        print(f"Results written to {output_filename}")
     else:
         print("No stocks met the criteria.")
-        with open("CANSLIM.txt", 'w') as output_file:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        output_filename = f"CANSLIM_{ticker}_{timestamp}.txt"
+        with open(output_filename, 'w') as output_file:
             output_file.write("No stocks met the criteria.\n")
 
 if __name__ == "__main__":
