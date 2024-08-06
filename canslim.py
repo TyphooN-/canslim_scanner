@@ -5,6 +5,18 @@ import pandas as pd
 import numpy as np
 from tqdm import tqdm
 import time
+from fake_useragent import UserAgent
+
+# Initialize the user agent generator
+ua = UserAgent()
+
+def get_new_user_agent():
+    new_ua = ua.random
+    return new_ua
+
+# Define rate limit
+RATE_LIMIT = 10  # requests per minute -- 20 failure
+RATE_LIMIT_INTERVAL = 60 / RATE_LIMIT  # time interval between requests
 
 def read_text_file(file_path):
     with open(file_path, 'r') as file:
@@ -13,12 +25,16 @@ def read_text_file(file_path):
 
 def fetch_data_with_retry(url, retries=3, timeout=10):
     for attempt in range(retries):
+        user_agent = get_new_user_agent()
+        headers = {
+            "User-Agent": user_agent
+        }
         try:
-            response = requests.get(url, timeout=timeout)
+            response = requests.get(url, headers=headers, timeout=timeout)
             response.raise_for_status()
             return response
         except (requests.RequestException, requests.Timeout) as e:
-            print(f"Attempt {attempt + 1} failed for URL {url}: {e}")
+            print(f"Attempt {attempt + 1} failed for URL {url} with User-Agent {user_agent}: {e}")
             time.sleep(2)  # Wait before retrying
     print(f"All attempts failed for URL {url}")
     return None
@@ -165,6 +181,9 @@ def main():
             if result:
                 analysis_results.append(result)
             pbar.update(1)
+            
+            # Rate limit the requests
+            time.sleep(RATE_LIMIT_INTERVAL)
 
     df = pd.DataFrame(analysis_results)
 

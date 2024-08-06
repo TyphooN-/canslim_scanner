@@ -3,3 +3,4 @@ pandas
 requests
 numpy
 beautifulsoup4
+fake_useragent
